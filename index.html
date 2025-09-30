@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Cards</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🌍 Travel Cards</h1>
+  <button id="addLocalCardBtn">Add Local Destination</button>
+  <button id="addFetchCardBtn">Add Destination From Fetch</button>
+
+  <div id="cardContainer"></div>
+
+  <script>
+    const cardContainer = document.getElementById('cardContainer');
+    const addLocalCardBtn = document.getElementById('addLocalCardBtn');
+    const addFetchCardBtn = document.getElementById('addFetchCardBtn');
+
+    // Initial travel destinations
+    let cards = [
+      { title: 'Paris', content: 'The city of lights.', img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj8caSoImzgdpi9AK2tyiMUaHv-9HGXf5QiQ&s' },
+      { title: 'Tokyo', content: 'Modern city with traditional temples.', img: 'https://res.cloudinary.com/aenetworks/image/upload/c_fill,ar_2,w_3840,h_1920,g_auto/dpr_auto/f_auto/q_auto:eco/v1/gettyimages-1390815938?_a=BAVAZGID0' }
+    ];
+
+    function renderCards() {
+      cardContainer.innerHTML = '';
+      cards.forEach(card => {
+        const div = document.createElement('div');
+        div.classList.add('card');
+        div.innerHTML = `
+          <img src="${card.img}" alt="${card.title}">
+          <h3>${card.title}</h3>
+          <p>${card.content}</p>
+        `;
+        cardContainer.appendChild(div);
+      });
+    }
+
+    addLocalCardBtn.addEventListener('click', () => {
+      const destinations = [
+        { title: 'Bali', content: 'Tropical paradise with beaches.', img: 'https://cdn.audleytravel.com/2478/1770/79/16027396-pura-ulun-danu-bratan-bali.jpg' },
+        { title: 'London', content: 'Famous for Big Ben and museums.', img: 'https://www.visitlondon.com/-/media/images/london/visit/general-london/westminster-at-dusk-london-1280x720.jpg?rev=3c05b9713c4b4405a7ab61aaeba53636&mw=800&hash=061A930869789795BC82B1A060E14562' },
+        { title: 'New York', content: 'The city that never sleeps.', img: 'https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg' }
+      ];
+      const randomDest = destinations[Math.floor(Math.random() * destinations.length)];
+      cards.push(randomDest);
+      renderCards();
+    });
+
+    addFetchCardBtn.addEventListener('click', () => {
+      fetch('travel.json') 
+        .then(response => response.json())
+        .then(fetchedCards => {
+          cards = cards.concat(fetchedCards);
+          renderCards();
+        })
+        .catch(error => console.error('Error fetching cards:', error));
+    });
+
+    renderCards();
+  </script>
+</body>
+</html>
